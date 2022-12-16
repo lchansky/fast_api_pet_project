@@ -22,7 +22,7 @@ class UserIn(BaseModel):
 
     @validator("password2")
     def password_match(cls, value, values: dict, **kwargs):
-        if 'password' in values.keys() and value != values.get('password'):
+        if 'password' in values and value != values.get('password'):
             raise ValueError("passwords don't match")
         return value
 
