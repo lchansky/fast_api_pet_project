@@ -8,24 +8,6 @@ from .base import BaseRepository
 
 class UserRepository(BaseRepository):
 
-    async def get_all(self, limit: int = 100, skip: int = 0) -> list[User]:
-        query = users.select().limit(limit).offset(skip)
-        return await self.database.fetch_all(query)
-
-    async def get_by_id(self, user_id: int) -> User | None:
-        query = users.select().where(users.c.id == user_id).first()
-        user = await self.database.fetch_one(query)
-        if not user:
-            return None
-        return User.parse_obj(user)
-
-    async def get_by_email(self, email: str) -> User | None:
-        query = users.select().where(users.c.email == email).first()
-        user = await self.database.fetch_one(query)
-        if not user:
-            return None
-        return User.parse_obj(user)
-
     async def create(self, user_in: UserIn) -> User:
         dt_now = datetime.datetime.utcnow()
         user = User(
@@ -43,6 +25,24 @@ class UserRepository(BaseRepository):
         user.id = await self.database.execute(query)
         user.password = ""
         return user
+
+    async def get_all(self, limit: int = 100, skip: int = 0) -> list[User]:
+        query = users.select().limit(limit).offset(skip)
+        return await self.database.fetch_all(query)
+
+    async def get_by_id(self, user_id: int) -> User | None:
+        query = users.select().where(users.c.id == user_id).first()
+        user = await self.database.fetch_one(query)
+        if not user:
+            return None
+        return User.parse_obj(user)
+
+    async def get_by_email(self, email: str) -> User | None:
+        query = users.select().where(users.c.email == email).first()
+        user = await self.database.fetch_one(query)
+        if not user:
+            return None
+        return User.parse_obj(user)
 
     async def update(self, user_id: int, ui: UserIn) -> User:
         dt_now = datetime.datetime.utcnow()

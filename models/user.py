@@ -21,8 +21,7 @@ class UserIn(BaseModel):
     is_company: bool = False
 
     @validator("password2")
-    def password_match(cls, value, values: dict, **kwargs):
-        if 'password' in values and value != values.get('password'):
+    def password_match(cls, v, values, **kwargs):
+        if 'password' in values and v != values["password"]:
             raise ValueError("passwords don't match")
-        return value
-
+        return v
