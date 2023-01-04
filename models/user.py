@@ -23,5 +23,5 @@ class UserIn(BaseModel):
     @validator("password2")
     def password_match(cls, v, values, **kwargs):
         if 'password' in values and v != values["password"]:
-            raise ValueError("passwords don't match")
+            raise ValueError("Passwords don't match")
         return v
