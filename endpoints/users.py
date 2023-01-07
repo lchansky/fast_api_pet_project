@@ -3,7 +3,7 @@ from pydantic import EmailStr
 
 from repositories.users import UserRepository
 from models.user import User, UserIn
-from .depends import get_user_repository
+from .depends import get_user_repository, get_current_user
 
 
 router = APIRouter()
@@ -37,7 +37,11 @@ async def create_user(
 @router.put("/", response_model=User)
 async def update_user(
         user_id: int,
-        user: UserIn,
+        user_in: UserIn,
         users: UserRepository = Depends(get_user_repository),
-):
-    return await users.update(user_id=user_id, ui=user)
+        current_user: User = Depends(get_current_user),
+) -> User:
+    old_user = await users.get_by_id(user_id=user_id)
+    if old_user is None or old_user.email != current_user.email:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return await users.update(user_id=user_id, ui=user_in)

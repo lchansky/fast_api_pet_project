@@ -15,6 +15,6 @@ async def login(login: Login,  users: UserRepository = Depends(get_user_reposito
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
 
     return Token(
-        access_token=create_access_token({"sub": user.email}),
+        access_string=create_access_token({"sub": user.email}),
         token_type="Bearer",
     )
