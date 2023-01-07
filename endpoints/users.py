@@ -13,9 +13,9 @@ router = APIRouter()
 async def read_users(
         users: UserRepository = Depends(get_user_repository),
         limit: int = 100,
-        skip: int = 0,
+        offset: int = 0,
 ):
-    return await users.get_all(limit=limit, skip=skip)
+    return await users.get_all(limit=limit, offset=offset)
 
 
 @router.get("/by_email", response_model=User)

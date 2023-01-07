@@ -34,8 +34,8 @@ class UserRepository(BaseRepository):
         user.password = ''
         return user
 
-    async def get_all(self, limit: int = 100, skip: int = 0) -> list[User]:
-        query = users.select().limit(limit).offset(skip)
+    async def get_all(self, limit: int = 100, offset: int = 0) -> list[User]:
+        query = users.select().limit(limit).offset(offset)
         return await self.database.fetch_all(query)
 
     async def get_by_id(self, user_id: int) -> User | None:
@@ -60,7 +60,6 @@ class UserRepository(BaseRepository):
             email=ui.email,
             password=hash_password(ui.password),
             is_company=ui.is_company,
-            created_at=dt_now,
             updated_at=dt_now,
         )
         user_kwargs = user.dict()

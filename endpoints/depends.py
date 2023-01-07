@@ -3,6 +3,7 @@ from fastapi import Depends, status, HTTPException
 from core.security import JWTBearer, decode_access_token
 from db.base import database
 from models.user import User
+from repositories.jobs import JobRepository
 from repositories.users import UserRepository
 
 
@@ -28,3 +29,8 @@ async def get_current_user(
         raise cred_exception
 
     return user
+
+
+def get_job_repository() -> JobRepository:
+    return JobRepository(database)
+
